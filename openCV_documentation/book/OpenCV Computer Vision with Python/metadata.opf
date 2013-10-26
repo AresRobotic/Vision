@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier opf:scheme="calibre" id="calibre_id">462</dc:identifier>
+        <dc:identifier opf:scheme="uuid" id="uuid_id">c6397a59-ca8d-4033-b309-35be7791b4d4</dc:identifier>
+        <dc:title>OpenCV Computer Vision With Python</dc:title>
+        <dc:creator opf:file-as="Howse, Joseph" opf:role="aut">Joseph Howse</dc:creator>
+        <dc:contributor opf:file-as="calibre" opf:role="bkp">calibre (0.9.44) [http://calibre-ebook.com]</dc:contributor>
+        <dc:date>2013-10-15T08:54:35+00:00</dc:date>
+        <dc:description>A practical, project-based tutorial for Python developers and hobbyists who want to get started with computer vision with OpenCV and Python.OpenCV Computer Vision with Python is written for Python developers who are new to computer vision and want a practical guide to teach them the essentials. Some understanding of image data (for example, pixels and color channels) would be beneficial. At a minimum you will need access to at least one webcam. Certain exercises require additional hardware like a second webcam, a Microsoft Kinect or an OpenNI-compliant depth sensor such as the Asus Xtion PRO.</dc:description>
+        <dc:publisher>Packt Publishing Ltd</dc:publisher>
+        <dc:identifier opf:scheme="GOOGLE">OQm3gNQ7xGcC</dc:identifier>
+        <dc:identifier opf:scheme="ISBN">9781782163930</dc:identifier>
+        <dc:language>eng</dc:language>
+        <meta content="{&quot;Joseph Howse&quot;: &quot;&quot;}" name="calibre:author_link_map"/>
+        <meta content="0" name="calibre:rating"/>
+        <meta content="2013-10-06T08:53:09+00:00" name="calibre:timestamp"/>
+        <meta content="OpenCV Computer Vision With Python" name="calibre:title_sort"/>
+    </metadata>
+    <guide>
+        <reference href="cover.jpg" title="Cover" type="cover"/>
+    </guide>
+</package>
