@@ -2,6 +2,9 @@
 
 //--- Please read help() below: ---
 
+#include "opencv2/opencv.hpp"
+#include <iostream>
+
 #include <iostream>
 #include <vector>
 #include <opencv/highgui.h>
