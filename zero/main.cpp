@@ -19,6 +19,7 @@ int main(int, char**)
         //Change la couleur
         cvtColor(frame, edges, CV_BGR2GRAY);
 
+
         //Filtre Gaussien pour adoucir l'image et supprimer le bruit
 
         GaussianBlur(edges, edges, Size(7,7), 1.5, 1.5);
