@@ -17,21 +17,37 @@ using namespace std;
 }
 
 int main() {
-	 Mat frame, undistord;
-	String window_name = "1 " ;
+	 Mat frame, undistord,cameraFeed;
+	 String window_name = "1 " ;
+	 Point2i pt(-1,-1);
 	Mat cameraMatrix, distCoeffs;
-	
-    Point2i pt(-1,-1);
-    namedWindow( window_name, CV_WINDOW_AUTOSIZE );
-    frame = imread("1.png");
-    
-    
-   //On utilise la matrice intrinseque calculée précédement
+	//On utilise la matrice intrinseque calculée précédement
 	FileStorage fs("intrinsec.yml", FileStorage::READ);
 	fs["camera_matrix"] >> cameraMatrix;
 	fs["distortion_coefficients"] >> distCoeffs;
+	
+	VideoCapture capture;
+	//open capture object at location zero (default location for webcam)
+	capture.open(1);
+	//set height and width of capture frame
+	//start an infinite loop where webcam feed is copied to cameraFeed matrix
+	//all of our operations will be performed within this loop
+
+	
+	
+
+		while(1){
+		//store image to matrix
+		capture.read(cameraFeed);
+	
+
+    namedWindow( window_name, CV_WINDOW_AUTOSIZE );
+  //  frame = imread("1.png");
+    
+    
+
 	//On redresse l'image produite en fonction des défaults du capteur
-	undistort(frame, undistord, cameraMatrix, distCoeffs);
+	undistort(cameraFeed, undistord, cameraMatrix, distCoeffs);
 	
     
     
@@ -40,7 +56,9 @@ int main() {
 
     setMouseCallback(window_name, onMouse, (void*)&pt);
     
+    
   waitKey(0);
+}
   return 0;
     
     // Note that we passed '&pt' (a pointer
