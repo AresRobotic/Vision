@@ -25,22 +25,13 @@ int main( int argc, char* argv[])
   std::cout << "There are " << imagePoints.size() << " imagePoints and " << objectPoints.size() << " objectPoints." << std::endl;
   
   
-  //On utilise la matrice intrinseque
+  //On utilise la matrice intrinseque calculée précédement
 	FileStorage fs("intrinsec.yml", FileStorage::READ);
 	Mat cameraMatrix, distCoeffs;
 	fs["camera_matrix"] >> cameraMatrix;
 	fs["distortion_coefficients"] >> distCoeffs;
   
-  /*setIdentity(cameraMatrix);
- 
-  std::cout << "Initial cameraMatrix: " << cameraMatrix << std::endl;
- 
-  Mat distCoeffs(4,1,DataType<double>::type);
-  distCoeffs.at<double>(0) = 0;
-  distCoeffs.at<double>(1) = 0;
-  distCoeffs.at<double>(2) = 0;
-  distCoeffs.at<double>(3) = 0;*/
-  
+
   
  std::cout << "Initial cameraMatrix: " << cameraMatrix << std::endl;
   Mat rvec(3,1,DataType<double>::type);
@@ -65,10 +56,10 @@ int main( int argc, char* argv[])
     
    for(unsigned int i = 0; i < imagePoints.size(); ++i)
      {
-		 cout<<imagePoints[i][1] ;
+
    cv::Mat uvPoint = cv::Mat::ones(3,1,cv::DataType<double>::type); //u,v,1
-	uvPoint.at<double>(0,0) = 883.; //got this point using mouse callback
-	uvPoint.at<double>(1,0) = 202.;
+	uvPoint.at<double>(0,0) = imagePoints[i].x; //got this point using mouse callback
+	uvPoint.at<double>(1,0) = imagePoints[i].y;
 	
 	cv::Mat tempMat, tempMat2;
 double s;
@@ -76,7 +67,7 @@ tempMat = rotationMatrix.inv() * cameraMatrix.inv() * uvPoint;
 tempMat2 = rotationMatrix.inv() * tvec;
 s = 0 + tempMat2.at<double>(2,0); //285 represents the height Zconst
 s /= tempMat.at<double>(2,0);
-std::cout << "P = " << rotationMatrix.inv() * (s * cameraMatrix.inv() * uvPoint - tvec) << std::endl ;
+std::cout << "P = " << rotationMatrix.inv() * (s * cameraMatrix.inv() * uvPoint - tvec) <<"P real =" << objectPoints[i]<< std::endl ;
 
    }
 
