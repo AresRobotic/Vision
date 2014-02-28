@@ -46,18 +46,19 @@ int main( int argc, char* argv[])
   std::cout << "rotationMatrix: " << rotationMatrix << std::endl;
  
   //Verification de la projection
-  std::vector<Point2f> projectedPoints;
-  cv::projectPoints(objectPoints, rvec, tvec, cameraMatrix, distCoeffs, projectedPoints);
+  std::vector<Point2f> projectedImagePoints;
+  cv::projectPoints(objectPoints, rvec, tvec, cameraMatrix, distCoeffs, projectedImagePoints);
  
-  for(unsigned int i = 0; i < projectedPoints.size(); ++i)
+  for(unsigned int i = 0; i < projectedImagePoints.size(); ++i)
     {
-    std::cout << "Image point: " << imagePoints[i] << " Projected to " << projectedPoints[i] << std::endl;
+    std::cout << "Image point: " << imagePoints[i] << " projected to " << projectedImagePoints[i] << std::endl;
     }
     
    for(unsigned int i = 0; i < imagePoints.size(); ++i)
      {
 
    cv::Mat uvPoint = cv::Mat::ones(3,1,cv::DataType<double>::type); //u,v,1
+   Mat projectedObjectPoints = cv::Mat::ones(3,1,cv::DataType<double>::type); //u,v,1
 	uvPoint.at<double>(0,0) = imagePoints[i].x; //got this point using mouse callback
 	uvPoint.at<double>(1,0) = imagePoints[i].y;
 	
@@ -67,7 +68,8 @@ tempMat = rotationMatrix.inv() * cameraMatrix.inv() * uvPoint;
 tempMat2 = rotationMatrix.inv() * tvec;
 s = 0 + tempMat2.at<double>(2,0); //285 represents the height Zconst
 s /= tempMat.at<double>(2,0);
-std::cout << "P = " << rotationMatrix.inv() * (s * cameraMatrix.inv() * uvPoint - tvec) <<"P real =" << objectPoints[i]<< std::endl ;
+projectedObjectPoints = rotationMatrix.inv() * (s * cameraMatrix.inv() * uvPoint - tvec);
+std::cout <<"Object point =" << objectPoints[i]<< " projected to " << projectedObjectPoints <<  std::endl ;
 
    }
 
@@ -89,16 +91,16 @@ std::vector<Point2f> Generate2DPoints()
  
   float x,y;
  
-  x=229;y=267 ;
+  x=230;y=268 ;
   points.push_back(Point2f(x,y));
  
-  x=601;y=89 ;
+  x=596;y=96 ;
   points.push_back(Point2f(x,y));
  
-  x=1065;y=301 ;
+  x=1066;y=306 ;
   points.push_back(Point2f(x,y));
  
-  x=915;y=635 ;
+  x=910;y=638 ;
   points.push_back(Point2f(x,y));
  
  
@@ -116,6 +118,7 @@ std::vector<Point3f> Generate3DPoints()
   std::vector<Point3f> points;
  
  
+	
   float x,y,z;
   z=0;
  

@@ -4,24 +4,39 @@
 
 using namespace cv;
 using namespace std;
- Mat frame;
- String window_name = "1 " ;
+
  void onMouse(int evt, int x, int y, int flags, void* param) {
     if(evt == CV_EVENT_LBUTTONDOWN) {
         /*Point* ptPtr = (Point*)param;
         ptPtr->x = x;
         ptPtr->y = y;
         cout << x <<y ;*/
-        cout<<"x="<<x<<", y="<<y<<endl;
+        cout<<""<<x<<" "<<y<<endl;
 
     }
 }
 
 int main() {
+	 Mat frame, undistord;
+	String window_name = "1 " ;
+	Mat cameraMatrix, distCoeffs;
+	
     Point2i pt(-1,-1);
     namedWindow( window_name, CV_WINDOW_AUTOSIZE );
     frame = imread("1.png");
-    imshow(window_name, frame);
+    
+    
+   //On utilise la matrice intrinseque calculée précédement
+	FileStorage fs("intrinsec.yml", FileStorage::READ);
+	fs["camera_matrix"] >> cameraMatrix;
+	fs["distortion_coefficients"] >> distCoeffs;
+	//On redresse l'image produite en fonction des défaults du capteur
+	undistort(frame, undistord, cameraMatrix, distCoeffs);
+	
+    
+    
+    
+    imshow(window_name, undistord);
 
     setMouseCallback(window_name, onMouse, (void*)&pt);
     
