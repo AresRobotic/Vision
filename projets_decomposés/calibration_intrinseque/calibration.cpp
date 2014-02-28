@@ -157,7 +157,7 @@ static bool runCalibration( vector<vector<Point2f> > imagePoints,
 
     bool ok = checkRange(cameraMatrix) && checkRange(distCoeffs);
 
-    totalAvgErr = computeReprojectionErrors(objectPoints, imagePoints,
+    totalAvgErr = computeReprojectionErrors(objectPoints, imagePofirints,
                 rvecs, tvecs, cameraMatrix, distCoeffs, reprojErrs);
 
     return ok;

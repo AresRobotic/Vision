@@ -14,13 +14,22 @@
 //IN THE SOFTWARE.
 
 #include "opencv2/opencv.hpp"
-#include <iostream>
 #include "../myfunctions.hpp"
- 
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <fstream>
 
+
+#include "opencv2/opencv.hpp"
+#include <iostream>
+#include <string>
+ 
+ 
+
+
+using namespace std;
 using namespace cv;
 //initial min and max HSV filter values.
 //these will be changed using trackbars
@@ -44,10 +53,28 @@ const string windowName1 = "HSV Image";
 const string windowName2 = "Thresholded Image";
 const string windowName3 = "After Morphological Operations";
 const string trackbarWindowName = "Trackbars";
+
+std::ofstream frames_stream("hsvValues.txt");
+
+
+////////////////////
+ std::vector<Point2f> imagePoints ;
+  std::vector<Point3f> objectPoints ;
+  Mat tvec(3,1,DataType<double>::type);
+  Mat cameraMatrix(3,3,cv::DataType<double>::type) ;
+  Mat rotationMatrix(3,3,cv::DataType<double>::type);
+
+
+/////////////////
+
+
+
 void on_trackbar( int, void* )
 {//This function gets called whenever a
 	// trackbar position is changed
+	frames_stream << H_MIN << " " << H_MAX << " " << S_MIN << " " << S_MAX << " " << V_MIN << " " << V_MAX << "\n";
 }
+
 string intToString(int number){
 
 
@@ -55,7 +82,7 @@ string intToString(int number){
 	ss << number;
 	return ss.str();
 }
-void createTrackbars(){
+void createHSVTrackbars(String trackbarWindowName){
 	//create window for trackbars
 
 
@@ -82,33 +109,21 @@ void createTrackbars(){
 
 
 }
-void drawObject(int x, int y,Mat &frame){
+void drawTarget(int u, int v,int X,int Y,Mat &frame){
 
 	//use some of the openCV drawing functions to draw crosshairs
 	//on your tracked image!
+	circle(frame,Point(u,v),20,Scalar(0,255,0),2);
+	line(frame,Point(u,v-5),Point(u,v-25),Scalar(0,255,0),2);
+	line(frame,Point(u,v+5),Point(u,v+25),Scalar(0,255,0),2);
+	line(frame,Point(u-5,v),Point(u-25,v),Scalar(0,255,0),2);
+	line(frame,Point(u+5,v),Point(u+25,v),Scalar(0,255,0),2);
 
-    //UPDATE:JUNE 18TH, 2013
-    //added 'if' and 'else' statements to prevent
-    //memory errors from writing off the screen (ie. (-25,-25) is not within the window!)
-
-	circle(frame,Point(x,y),20,Scalar(0,255,0),2);
-    if(y-25>0)
-    line(frame,Point(x,y),Point(x,y-25),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(x,0),Scalar(0,255,0),2);
-    if(y+25<FRAME_HEIGHT)
-    line(frame,Point(x,y),Point(x,y+25),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(x,FRAME_HEIGHT),Scalar(0,255,0),2);
-    if(x-25>0)
-    line(frame,Point(x,y),Point(x-25,y),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(0,y),Scalar(0,255,0),2);
-    if(x+25<FRAME_WIDTH)
-    line(frame,Point(x,y),Point(x+25,y),Scalar(0,255,0),2);
-    else line(frame,Point(x,y),Point(FRAME_WIDTH,y),Scalar(0,255,0),2);
-
-	putText(frame,intToString(x)+","+intToString(y),Point(x,y+30),1,1,Scalar(0,255,0),2);
+	putText(frame,intToString(X)+","+intToString(Y),Point(u,v+30),1,1,Scalar(0,255,0),2);
 
 }
 void morphOps(Mat &thresh){
+
 	//create structuring element that will be used to "dilate" and "erode" image.
 	//the element chosen here is a 3px by 3px rectangle
 
@@ -121,12 +136,13 @@ void morphOps(Mat &thresh){
 
 
 	dilate(thresh,thresh,dilateElement);
+	dilate(thresh,thresh,dilateElement);
 	
 
 
 }
-void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed){
-
+void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed){
+    int X,Y = 0 ;
 	Mat temp;
 	threshold.copyTo(temp);
 	//these two vectors needed for output of findContours
@@ -151,10 +167,18 @@ void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed){
 				//we only want the object with the largest area so we safe a reference area each
 				//iteration and compare it to the area in the next iteration.
                 if(area>MIN_OBJECT_AREA && area<MAX_OBJECT_AREA && area>refArea){
-					x = moment.m10/area;
-					y = moment.m01/area;
+					u = moment.m10/area;
+					v = moment.m01/area;
 					objectFound = true;
-					refArea = area;
+					
+					Point2f xy(u,v) ;
+					 Point3f projectedObjectPoints = generate3DFrom2DPoints(xy, rotationMatrix,cameraMatrix,tvec,0) ;
+					 X = projectedObjectPoints.x ;
+					 Y =  projectedObjectPoints.y ;
+					 //cout <<"pixel :"<<u<<","<<v<<" réel :"<<X<<","<<Y ;
+					
+					
+
 				}else objectFound = false;
 
 
@@ -163,15 +187,28 @@ void trackFilteredObject(int &x, int &y, Mat threshold, Mat &cameraFeed){
 			if(objectFound ==true){
 				putText(cameraFeed,"Tracking Object",Point(0,50),2,1,Scalar(0,255,0),2);
 				//draw object location on screen
-				drawObject(x,y,cameraFeed);}
+				drawTarget(u,v,X,Y,cameraFeed);}
 
 		}else putText(cameraFeed,"TOO MUCH NOISE! ADJUST FILTER",Point(0,50),1,2,Scalar(0,0,255),2);
 	}
 }
 int main(int argc, char* argv[])
 {
+	imagePoints = Generate2DPoints();
+    objectPoints = Generate3DPoints();
+  
+    GenerateExtrinsecMatrix("intrinsec.yml",imagePoints,objectPoints,tvec,rotationMatrix, cameraMatrix) ; 
+
+
+	
+	
 	//some boolean variables for different functionality within this
 	//program
+	/*if( argc < 2 ){
+		printf( "\n Error! No video data!!! \n" );
+		return -1;
+	}*/
+	
     bool trackObjects = true;
     bool useMorphOps = true;
 	//Matrix to store each frame of the webcam feed
@@ -183,11 +220,17 @@ int main(int argc, char* argv[])
 	//x and y values for the location of the object
 	int x=0, y=0;
 	//create slider bars for HSV filtering
-	createTrackbars();
+	createHSVTrackbars(trackbarWindowName);
 	//video capture object to acquire webcam feed
-	VideoCapture capture;
+	VideoCapture capture(0);
+	//capture.open(0);
+	
+	/*if(!capture.open(argv[1])){
+		exit(1);         // Exit if fail
+	}*/
+	
 	//open capture object at location zero (default location for webcam)
-	capture.open(0);
+	//capture.open(0);
 	//set height and width of capture frame
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
@@ -219,14 +262,13 @@ int main(int argc, char* argv[])
 
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
-		waitKey(30);
+		waitKey(10);
+		int c = cvWaitKey(15);    
+		//If 'ESC' is pressed, break the loop
+		if((char)c==27 ){
+			break;
+		}
 	}
-
-
-
-
-
 
 	return 0;
 }
-

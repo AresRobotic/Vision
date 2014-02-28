@@ -1,0 +1,2 @@
+1. Ajouter fonction de vérification si la camera est branchée (erreur etrange sinon)
+2. ajouter vérification Matrices de calibration non nulles
