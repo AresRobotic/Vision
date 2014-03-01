@@ -24,9 +24,9 @@
 using namespace cv;
 //initial min and max HSV filter values.
 //these will be changed using trackbars
-int H_MIN = 0;
-int H_MAX = 256;
-int S_MIN = 0;
+int H_MIN = 121;
+int H_MAX = 190;
+int S_MIN = 100;
 int S_MAX = 256;
 int V_MIN = 0;
 int V_MAX = 256;
