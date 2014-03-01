@@ -192,3 +192,25 @@ void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed, bool &o
 		}//else putText(cameraFeed,"TOO MUCH NOISE! ADJUST FILTER",Point(0,50),1,2,Scalar(0,0,255),2);
 	}
 }
+
+void createHSVTrackbars(String trackbarWindowName, int *h1, int *h2, int *s1,int *s2,int *v1,int *v2){
+	//create window for trackbars
+    namedWindow(trackbarWindowName,0);
+
+	//create trackbars and insert them into window  
+    createTrackbar( "H MIN", trackbarWindowName, h1, 255, on_trackbar );
+    createTrackbar( "H MAX", trackbarWindowName, h2, 255, on_trackbar );
+    createTrackbar( "S MIN", trackbarWindowName, s1, 255, on_trackbar );
+    createTrackbar( "S MAX", trackbarWindowName, s2, 255, on_trackbar );
+    createTrackbar( "V MIN", trackbarWindowName, v1, 255, on_trackbar );
+    createTrackbar( "V MAX", trackbarWindowName, v2, 255, on_trackbar );
+
+}
+
+//Function called by the trackbar
+void on_trackbar( int, void* )
+{
+	cout << "coucou" ;//This function gets called whenever a
+	// trackbar position is changed
+    //frames_stream << 10 << " " << 15 << " " << "\n";
+}

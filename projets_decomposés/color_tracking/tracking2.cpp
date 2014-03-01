@@ -27,33 +27,12 @@
 #include <string>
  
 
-
-
 using namespace std;
 using namespace cv;
-//initial min and max HSV filter values.
-//these will be changed using trackbars
-int H_MIN = 0;
-int H_MAX = 256;
-int S_MIN = 0;
-int S_MAX = 256;
-int V_MIN = 0;
-int V_MAX = 256;
-//default capture width and height
-//const int FRAME_WIDTH = 640;
-//const int FRAME_HEIGHT = 480;
-//max number of objects to be detected in frame
-
-//names that will appear at the top of each window
-const string windowName = "Original Image";
-const string windowName1 = "HSV Image";
-const string windowName2 = "Thresholded Image";
-const string windowName3 = "After Morphological Operations";
-
 
 
 ////////////////////
- std::vector<Point2f> imagePoints ;
+  std::vector<Point2f> imagePoints ;
   std::vector<Point3f> objectPoints ;
   Mat tvec(3,1,DataType<double>::type);
   Mat cameraMatrix(3,3,cv::DataType<double>::type) ;
@@ -63,52 +42,15 @@ const string windowName3 = "After Morphological Operations";
 /////////////////
 
 
-void on_trackbar( int, void* )
-{
-	cout << "coucou" ;//This function gets called whenever a
-	// trackbar position is changed
-//	frames_stream << H_MIN << " " << H_MAX << " " << S_MIN << " " << S_MAX << " " << V_MIN << " " << V_MAX << "\n";
-}
-
-
-void createHSVTrackbars(String trackbarWindowName, int &h1, int &h2, int &s1,int &s2,int &v1,int &v2){
-	//create window for trackbars
-
-
-    namedWindow(trackbarWindowName,0);
-	//create memory to store trackbar name on window
-	/*char TrackbarName[50];
-	sprintf( TrackbarName, "H_MIN", H_MIN);
-	sprintf( TrackbarName, "H_MAX", H_MAX);
-	sprintf( TrackbarName, "S_MIN", S_MIN);
-	sprintf( TrackbarName, "S_MAX", S_MAX);
-	sprintf( TrackbarName, "V_MIN", V_MIN);
-	sprintf( TrackbarName, "V_MAX", V_MAX);*/
-	//create trackbars and insert them into window
-	//3 parameters are: the address of the variable that is changing when the trackbar is moved(eg.H_LOW),
-	//the max value the trackbar can move (eg. H_HIGH), 
-	//and the function that is called whenever the trackbar is moved(eg. on_trackbar)
-	//                                  ---->    ---->     ---->      
-    createTrackbar( "H MIN", trackbarWindowName, &h1, H_MAX, on_trackbar );
-    createTrackbar( "H MAX", trackbarWindowName, &h2, H_MAX, on_trackbar );
-    createTrackbar( "S MIN", trackbarWindowName, &s1, S_MAX, on_trackbar );
-    createTrackbar( "S MAX", trackbarWindowName, &s2, S_MAX, on_trackbar );
-    createTrackbar( "V MIN", trackbarWindowName, &v1, V_MAX, on_trackbar );
-    createTrackbar( "V MAX", trackbarWindowName, &v2, V_MAX, on_trackbar );
-
-
-}
-
-
-
 int main(int argc, char* argv[])
 {
 	imagePoints = Generate2DPoints();
     objectPoints = Generate3DPoints();
     int X,Y = 0;
-    int h1,h2,s1,s2,v1,v2 = 0 ;
+    int h1 = 0; int s1 = 0; int v1 = 0;
+    int h2 = 255; int s2 = 255; int v2 = 250;
     //x and y values for the location of the object image
-	int u=0, v=0;
+	int u = 0, v = 0;
 	//Equivalent with the object Point2f
 	
 	// If object if found
@@ -120,6 +62,13 @@ int main(int argc, char* argv[])
 	Mat HSV;
 	//matrix storage for binary threshold image
 	Mat threshold;
+	//names that will appear at the top of each window
+	const string windowName = "Original Image";
+	const string windowName1 = "HSV Image";
+	const string windowName2 = "Thresholded Image";
+	const string windowName3 = "After Morphological Operations";
+
+	
   
     GenerateExtrinsecMatrix("intrinsec.yml",imagePoints,objectPoints,tvec,rotationMatrix, cameraMatrix) ; 
 
@@ -138,7 +87,7 @@ int main(int argc, char* argv[])
 
 
 	//create slider bars for HSV filtering
-	createHSVTrackbars(TRACKBAR_WINDOW_NAME,h1,h2,s1,s2,v1,v2);
+	createHSVTrackbars("Trackbars",&h1,&h2,&s1,&s2,&v1,&v2);
 	//video capture object to acquire webcam feed
 	VideoCapture capture(0);
 	//capture.open(0);
@@ -160,7 +109,7 @@ int main(int argc, char* argv[])
 		cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
 		
 		//filter HSV image between values and store filtered image to threshold matrix
-		inRange(HSV,Scalar(H_MIN,S_MIN,V_MIN),Scalar(H_MAX,S_MAX,V_MAX),threshold);
+		inRange(HSV,Scalar(h1,s1,v1),Scalar(h2,s2,v2),threshold);
 		
 		//perform morphological operations on thresholded image to eliminate noise and emphasize the filtered object(s)
 		if(useErodeAndDilate)
