@@ -214,3 +214,28 @@ void on_trackbar( int, void* )
 	// trackbar position is changed
     //frames_stream << 10 << " " << 15 << " " << "\n";
 }
+
+bool generate2DPointsFromCheesboard(Mat undistord_image, Size chess_height_width, std::vector<Point2f> &ptvec)
+{
+
+	//cvtColor(undistord_image,undistord_image,CV_RGB2GRAY);
+	bool found = findChessboardCorners( undistord_image, chess_height_width, ptvec, CV_CALIB_CB_ADAPTIVE_THRESH );
+	//cout << ptvec ;
+	if (found)
+		drawChessboardCorners(undistord_image,chess_height_width, ptvec, found) ;
+	else cout<< "ERROR ; chessboard not found" ;
+	//imshow("Cheesboard found", undistord_image);
+	//waitKey(0); 
+	return found ;	
+}
+
+
+void generate3DPointsFromCheesboard(Size chess_height_width, float squareSize, vector<Point3f>& corners ) 
+{
+	corners.clear();
+	for( int i = 0; i < chess_height_width.height; ++i )
+	{
+		for( int j = 0; j < chess_height_width.width; ++j )
+        corners.push_back(Point3f(float( j*squareSize ), float( i*squareSize ), 0));       
+	}
+}

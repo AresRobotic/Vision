@@ -34,3 +34,7 @@ void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed, bool &o
 void createHSVTrackbars(String trackbarWindowName, int *h1, int *h2, int *s1,int *s2,int *v1,int *v2) ;
 
 void on_trackbar( int, void* );
+
+bool generate2DPointsFromCheesboard(Mat undistord_image, Size chess_height_width, std::vector<Point2f> &ptvec) ;
+
+void generate3DPointsFromCheesboard(Size chess_height_width, float squareSize, vector<Point3f>& corners ) ;

@@ -28,7 +28,7 @@ int main() {
 	
 	VideoCapture capture;
 	//open capture object at location zero (default location for webcam)
-	capture.open(1);
+	capture.open(0);
 	//set height and width of capture frame
 	//start an infinite loop where webcam feed is copied to cameraFeed matrix
 	//all of our operations will be performed within this loop
@@ -66,8 +66,8 @@ int main() {
     // Therefore `pt` will update its [x,y] coordinates
     // whenever user left-clicks on the image in "Output Window".
 }
- 
-/*
+ /*
+
 static void onMouse( int event, int x, int y, int f, void* ){
 
  Vec3b pix=image.at<Vec3b>(y,x);  // row,col !!
@@ -76,15 +76,6 @@ static void onMouse( int event, int x, int y, int f, void* ){
  int R=pix.val[2];
  cout<<R<<endl<<G<<endl<<B<<endl;
 
-}
-
-
-int main( int argc, char** argv )
-{
-  namedWindow( window_name, CV_WINDOW_AUTOSIZE );
-  image = imread( "1.png");
-  imshow( window_name, image );    
-  setMouseCallback( window_name, onMouse, 0 );
-  waitKey(0);
-  return 0;
 }*/
+
+

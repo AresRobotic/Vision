@@ -1,3 +1,5 @@
+Permet d'obtenir la matrice de calibration extrinseque à partir de la matrice intrinseque. La matrice intrinseque est fournit via le fichier en .yml
+
 Chaque carreau du sol est un carre de 30cm de côté. Un grand carre est donc délimité par 4 balles (1 blanche, 1 rouge et 2 jaunes) de 5 carreaux de côté.
 On peut se servir des balles de côté comme repere et les balles dans le carré pour vérifier nos calculs.
 
