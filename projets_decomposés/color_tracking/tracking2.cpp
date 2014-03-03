@@ -32,47 +32,44 @@ using namespace cv;
 
 
 ////////////////////
+/*
   std::vector<Point2f> imagePoints ;
   std::vector<Point3f> objectPoints ;
   Mat tvec(3,1,DataType<double>::type);
   Mat cameraMatrix(3,3,cv::DataType<double>::type) ;
   Mat rotationMatrix(3,3,cv::DataType<double>::type);
   Mat rvec(3,1,DataType<double>::type);
-
+*/
 
 /////////////////
 
 
 int main(int argc, char* argv[])
 {
-	imagePoints = Generate2DPoints();
-    objectPoints = Generate3DPoints();
-    int X,Y = 0;
+
     int h1 = 0; int s1 = 0; int v1 = 0;
     int h2 = 255; int s2 = 255; int v2 = 250;
     //x and y values for the location of the object image
 	int u = 0, v = 0;
-	//Equivalent with the object Point2f
-	
+	//Real point value
+	int X,Y = 0;
 	// If object if found
 	bool objectFound ;
+	bool trackObjects = true;
+    bool useErodeAndDilate = true;
 	
-	//Matrix to store each frame of the webcam feed
-	Mat cameraFeed;
-	//matrix storage for HSV image
-	Mat HSV;
-	//matrix storage for binary threshold image
-	Mat threshold;
-	//names that will appear at the top of each window
+	//matrix storage for HSV image, input and filtered
+	Mat HSV, cameraFeed, threshold ;
+
 	const string windowName = "Original Image";
-	const string windowName1 = "HSV Image";
 	const string windowName2 = "Thresholded Image";
 	const string windowName3 = "After Morphological Operations";
 
+	/*imagePoints = Generate2DPoints();
+    objectPoints = Generate3DPoints();
 	
-  
     GenerateExtrinsecMatrix("intrinsec.yml",imagePoints,objectPoints,tvec,rvec,rotationMatrix, cameraMatrix) ; 
-
+    */
 
 	
 	
@@ -83,26 +80,75 @@ int main(int argc, char* argv[])
 		return -1;
 	}*/
 	
-    bool trackObjects = true;
-    bool useErodeAndDilate = true;
 
 
-	//create slider bars for HSV filtering
-	createHSVTrackbars("Trackbars",&h1,&h2,&s1,&s2,&v1,&v2);
+
+
 	//video capture object to acquire webcam feed
 	VideoCapture capture(0);
-	//capture.open(0);
 	
-	/*if(!capture.open(argv[1])){
-		exit(1);         // Exit if fail
-	}*/
-	
+	if (!capture.isOpened())  // if not success, exit program
+    {		
+		cout << "Cannot open the video cam" << endl;
+        return -1;
+    }
 
 	//set height and width of capture frame
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
 	//start an infinite loop where webcam feed is copied to cameraFeed matrix
 	//all of our operations will be performed within this loop
+	
+	//capture.read(cameraFeed);
+	//chessboard calibration
+	  std::vector<Point3f> objectPoints ;
+	  std::vector<Point2f> ptvec ;
+	  Mat tvec(3,1,DataType<double>::type);
+	  Mat rvec(3,1,DataType<double>::type);
+	  Mat cameraMatrix(3,3,cv::DataType<double>::type) ;
+	  Mat rotationMatrix(3,3,cv::DataType<double>::type);
+	  Size chessSize = cvSize(9,6) ;
+	  generate3DPointsFromCheesboard(chessSize,3.0,objectPoints);
+	
+	
+	
+	//Mat img = imread("chessboard.png");//, CV_LOAD_IMAGE_GRAYSCALE);
+	
+	
+	//namedWindow( "Image View", WINDOW_AUTOSIZE );
+	
+
+	
+   
+    
+    
+		//create slider bars for HSV filtering
+	createHSVTrackbars("Trackbars",&h1,&h2,&s1,&s2,&v1,&v2);
+	
+	while(1){
+		capture.read(cameraFeed);
+		bool found = generate2DPointsFromCheesboard(cameraFeed,chessSize,ptvec) ;
+		imshow("Image View", cameraFeed);
+		if (found)
+		{
+			cout << "chessboard found" << endl;
+			break; 
+		}
+		
+		// 0.5 s delay
+		waitKey(100) ;
+		//wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
+		if (waitKey(30) == 27) 
+		{
+			cout << "esc key is pressed by user" << endl;
+			break; 
+		}
+	}
+	//Generate extrinsec parameter
+	 GenerateExtrinsecMatrix("intrinsec.yml",ptvec,objectPoints,tvec,rvec,rotationMatrix, cameraMatrix) ;
+	
+	
+	
 	while(1){
 		//store image to matrix
 		capture.read(cameraFeed);
@@ -139,8 +185,7 @@ int main(int argc, char* argv[])
 		//show frames 
 		imshow(windowName2,threshold);
 		imshow(windowName,cameraFeed);
-		//imshow(windowName1,HSV);
-		
+
 
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
