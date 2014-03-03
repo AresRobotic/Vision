@@ -21,8 +21,7 @@ using namespace std;
 Point3f generate3DFrom2DPoints(Point2f imagePoint,Mat rotationMatrix, Mat cameraMatrix, Mat tvec,int hauteurDuPlan) ;
 vector<Point3f> Generate3DPoints() ;
 vector<Point2f> Generate2DPoints() ;
-void GenerateExtrinsecMatrix(String intrinsecFileName,std::vector<Point2f> imagePoints, std::vector<Point3f> objectPoints,Mat tvec,Mat rotationMatrix, Mat cameraMatrix) ;
-
+void GenerateExtrinsecMatrix(String intrinsecFileName,std::vector<Point2f> imagePoints, std::vector<Point3f> objectPoints,Mat tvec, Mat rvec, Mat rotationMatrix, Mat cameraMatrix);
 string intToString(int number) ;
 
 void drawTarget(int u, int v,int X,int Y,Mat &frame) ;

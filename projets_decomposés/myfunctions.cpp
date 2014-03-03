@@ -78,12 +78,12 @@ std::vector<Point3f> Generate3DPoints()
   return points;
 }
 
-void GenerateExtrinsecMatrix(String intrinsecFileName,std::vector<Point2f> imagePoints, std::vector<Point3f> objectPoints,Mat tvec, Mat rotationMatrix, Mat cameraMatrix)
+void GenerateExtrinsecMatrix(String intrinsecFileName,std::vector<Point2f> imagePoints, std::vector<Point3f> objectPoints,Mat tvec, Mat rvec, Mat rotationMatrix, Mat cameraMatrix)
 {
 	
   //std::vector<Point2f> imagePoints = Generate2DPoints();
   //std::vector<Point3f> objectPoints = Generate3DPoints();
-  Mat rvec(3,1,DataType<double>::type);
+  //Mat rvec(3,1,DataType<double>::type);
   //Mat rotationMatrix(3,3, DataType<double>::type) ;
  
   std::cout << "There are " << imagePoints.size() << " imagePoints and " << objectPoints.size() << " objectPoints." << std::endl;

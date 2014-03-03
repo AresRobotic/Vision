@@ -20,6 +20,7 @@ int main( int argc, char* argv[])
  // std::vector<Point2f> imagePoints ;
   std::vector<Point3f> objectPoints ;
   Mat tvec(3,1,DataType<double>::type);
+  Mat rvec(3,1,DataType<double>::type);
   Mat cameraMatrix(3,3,cv::DataType<double>::type) ;
   Mat rotationMatrix(3,3,cv::DataType<double>::type);
   Size chessSize = cvSize(9,6) ;
@@ -35,7 +36,7 @@ int main( int argc, char* argv[])
 	imshow("Image View", img);
 
 	
-    GenerateExtrinsecMatrix("intrinsec.yml",ptvec,objectPoints,tvec,rotationMatrix, cameraMatrix) ;
+    GenerateExtrinsecMatrix("intrinsec.yml",ptvec,objectPoints,tvec,rvec,rotationMatrix, cameraMatrix) ;
     
     
 	
