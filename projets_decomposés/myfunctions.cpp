@@ -154,7 +154,7 @@ void erodeAndDilate(Mat &thresh){
 	dilate(thresh,thresh,dilateElement);
 }
 
-void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed, bool &objectFound){
+bool trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed){
 	Mat temp;
 	threshold.copyTo(temp);
 	//these two vectors needed for output of findContours
@@ -164,7 +164,7 @@ void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed, bool &o
 	findContours(temp,contours,hierarchy,CV_RETR_CCOMP,CV_CHAIN_APPROX_SIMPLE );
 	//use moments method to find our filtered object
 	double refArea = 0;
-	objectFound = false;
+	bool objectFound = false;
 	if (hierarchy.size() > 0) 
 	{
 		int numObjects = hierarchy.size();
@@ -191,6 +191,7 @@ void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed, bool &o
 
 		}//else putText(cameraFeed,"TOO MUCH NOISE! ADJUST FILTER",Point(0,50),1,2,Scalar(0,0,255),2);
 	}
+	return objectFound ;
 }
 
 void createHSVTrackbars(String trackbarWindowName, int *h1, int *h2, int *s1,int *s2,int *v1,int *v2){
@@ -210,7 +211,7 @@ void createHSVTrackbars(String trackbarWindowName, int *h1, int *h2, int *s1,int
 //Function called by the trackbar
 void on_trackbar( int, void* )
 {
-	cout << "coucou" ;//This function gets called whenever a
+	//cout << "coucou" ;//This function gets called whenever a
 	// trackbar position is changed
     //frames_stream << 10 << " " << 15 << " " << "\n";
 }
@@ -223,7 +224,7 @@ bool generate2DPointsFromCheesboard(Mat undistord_image, Size chess_height_width
 	//cout << ptvec ;
 	if (found)
 		drawChessboardCorners(undistord_image,chess_height_width, ptvec, found) ;
-	else cout<< "ERROR ; chessboard not found" ;
+	else cout<< "ERROR ; chessboard not found" << endl;
 	//imshow("Cheesboard found", undistord_image);
 	//waitKey(0); 
 	return found ;	

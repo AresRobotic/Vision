@@ -5,7 +5,7 @@
  *      Author: Andrew B. Godbehere
  */
 
-#include <opencv2/opencv.hpp>
+#include "opencv2/opencv.hpp"
 #include <iostream>
 
 using namespace cv;
@@ -27,10 +27,10 @@ static void help()
 int main(int argc, char** argv)
 {
     help();
-
+/*
     initModule_video();
     setUseOptimized(true);
-    setNumThreads(8);
+    setNumThreads(8);*/
 
     Ptr<BackgroundSubtractorGMG> fgbg = Algorithm::create<BackgroundSubtractorGMG>("BackgroundSubtractor.GMG");
     if (fgbg.empty())

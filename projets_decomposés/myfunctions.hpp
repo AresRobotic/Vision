@@ -28,7 +28,7 @@ void drawTarget(int u, int v,int X,int Y,Mat &frame) ;
 
 void erodeAndDilate(Mat &thresh) ;
 
-void trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed, bool &objectFound) ;
+bool trackFilteredObject(int &u, int &v, Mat threshold, Mat &cameraFeed) ;
 
 void createHSVTrackbars(String trackbarWindowName, int *h1, int *h2, int *s1,int *s2,int *v1,int *v2) ;
 
