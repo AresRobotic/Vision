@@ -21,8 +21,8 @@ int main(int argc, char* argv[])
 {
 	cout << "OpenCV version : " << CV_VERSION << endl;
 
-    int h1 = 0; int s1 = 16; int v1 = 160;
-    int h2 = 17 ; int s2 = 78; int v2 = 204;
+    int h1 = 0; int s1 = 115; int v1 = 144;
+    int h2 = 12 ; int s2 = 255; int v2 = 255;
     //x and y values for the location of the object image
 	int u = 0, v = 0;
 	//Real point value
@@ -84,10 +84,10 @@ int main(int argc, char* argv[])
 	  Size chessSize = cvSize(9,6) ;
 	  
 	  //Generate 3D points that correspond to the chessboard
-	  generate3DPointsFromCheesboard(chessSize,3.0,objectPoints);
+	  generate3DPointsFromCheesboard(chessSize,2.3,objectPoints);
 	
 	//Loop while not finding a chessboard of size "chessSize" and not pressed "echap"
-	/*while(waitKey(30) != 27){
+	while(waitKey(30) != 27){
 		capture.read(cameraFeed);
 		bool found = generate2DPointsFromCheesboard(cameraFeed,chessSize,ptvec) ;
 		imshow("Image View", cameraFeed);
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 	
 	//Generate extrinsec parameter
 	 GenerateExtrinsecMatrix("intrinsec.yml",ptvec,objectPoints,tvec,rvec,rotationMatrix, cameraMatrix) ;
-	*/
+	
 	
 	// Loop for the tracking
 	while(1){
