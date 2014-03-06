@@ -3,6 +3,10 @@
 
 Point3f generate3DFrom2DPoints(Point2f imagePoint,Mat rotationMatrix, Mat cameraMatrix, Mat tvec,int hauteurDuPlan)
 {
+	//permet de faire les transformations pour passer de la 2D à la 3D en contraignant Z, la hauteur dans le repère objet
+	//A optimiser sur les inversions de matrices
+	//cf http://stackoverflow.com/questions/12299870/computing-x-y-coordinate-3d-from-image-point
+	
 	Mat tempMat, tempMat2;
 	double s;
 	Mat uvPoint = cv::Mat::ones(3,1,DataType<double>::type); //u,v,1
@@ -134,7 +138,7 @@ void drawTarget(int u, int v,int X,int Y,Mat &frame){
 	line(frame,Point(u-5,v),Point(u-25,v),Scalar(0,255,0),2);
 	line(frame,Point(u+5,v),Point(u+25,v),Scalar(0,255,0),2);
 
-	putText(frame,intToString(X)+","+intToString(Y),Point(u,v+30),1,1,Scalar(0,255,0),2);
+	putText(frame,"x="+intToString(X)+" ; y="+intToString(Y),Point(u,v+30),1,1,Scalar(0,255,0),2);
 
 }
 
@@ -143,9 +147,9 @@ void erodeAndDilate(Mat &thresh){
 	//create structuring element that will be used to "dilate" and "erode" image.
 	//the element chosen here is a 3px by 3px rectangle
 
-	Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
+	Mat erodeElement = getStructuringElement( MORPH_ELLIPSE,Size(5,5)); //MORPH_RECT MORPH_ELLIPSE
     //dilate with larger element so make sure object is nicely visible
-	Mat dilateElement = getStructuringElement( MORPH_RECT,Size(8,8));
+	Mat dilateElement = getStructuringElement( MORPH_ELLIPSE,Size(5,5));
 
 	erode(thresh,thresh,erodeElement);
 	erode(thresh,thresh,erodeElement);
@@ -239,4 +243,34 @@ void generate3DPointsFromCheesboard(Size chess_height_width, float squareSize, v
 		for( int j = 0; j < chess_height_width.width; ++j )
         corners.push_back(Point3f(float( j*squareSize ), float( i*squareSize ), 0));       
 	}
+}
+
+void drawSimpleText(Mat img,String text)
+{
+//extract from http://docs.opencv.org/modules/core/doc/drawing_functions.html#gettextsize	
+int fontFace = FONT_HERSHEY_SCRIPT_SIMPLEX;
+double fontScale = 2;
+int thickness = 3;
+int baseline = 0;
+Size textSize = getTextSize(text, fontFace,
+                            fontScale, thickness, &baseline);
+baseline += thickness;
+
+// center the text
+Point textOrg((img.cols - textSize.width)/2,
+              (img.rows + textSize.height)/2);
+
+// draw the box
+/*rectangle(img, textOrg + Point(0, baseline),
+          textOrg + Point(textSize.width, -textSize.height),
+          Scalar(0,0,255));*/
+// ... and the baseline first
+/*line(img, textOrg + Point(0, thickness),
+     textOrg + Point(textSize.width, thickness),
+     Scalar(0, 0, 255));*/
+
+// then put the text itself
+putText(img, text, textOrg, fontFace, 2,
+        Scalar::all(255), 1, CV_AA);
+	
 }

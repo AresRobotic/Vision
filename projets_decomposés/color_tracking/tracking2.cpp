@@ -40,9 +40,6 @@ int main(int argc, char* argv[])
 	
     GenerateExtrinsecMatrix("intrinsec.yml",imagePoints,objectPoints,tvec,rvec,rotationMatrix, cameraMatrix) ; 
     */
-
-	
-	
 	//some boolean variables for different functionality within this
 	//program
 	/*if( argc < 2 ){
@@ -85,6 +82,17 @@ int main(int argc, char* argv[])
 	  
 	  //Generate 3D points that correspond to the chessboard
 	  generate3DPointsFromCheesboard(chessSize,2.3,objectPoints);
+	
+	while(waitKey(30) != 27){
+		capture.read(cameraFeed);
+		String text = "Put the chessboard and press echap" ;
+		//cout << text ;
+		drawSimpleText(cameraFeed,text) ;
+		
+		//putText(cameraFeed,"Pressez echap après avoir placé le damier",Point(0,50),1,2,Scalar(0,0,255),2);
+		imshow("Waiting for chessboard", cameraFeed);
+	}
+	cvDestroyWindow("Waiting for chessboard" ); 
 	
 	//Loop while not finding a chessboard of size "chessSize" and not pressed "echap"
 	while(waitKey(30) != 27){
@@ -138,6 +146,7 @@ int main(int argc, char* argv[])
 					putText(cameraFeed,"Tracking Object",Point(0,50),2,1,Scalar(0,125,125),1);
 					//draw object location on screen
 					drawTarget(u,v,projectedObjectPoints.x,projectedObjectPoints.y,cameraFeed);
+					//drawTarget(u,v,1,2,cameraFeed);
 					
 				}
 			
@@ -145,16 +154,19 @@ int main(int argc, char* argv[])
 		//show frames 
 		imshow("Thresholded Image",threshold);
 		imshow("Original Image",cameraFeed);
+		//Ajout couleur par la souris
+		//SetMouseCallback("Original Image", getObjectColor);
 		//"After Morphological Operations"
 
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
-		waitKey(10);
-		int c = cvWaitKey(15);    
+		waitKey(10);  
+		
+		/*int c = cvWaitKey(15);    
 		//If 'ESC' is pressed, break the loop
 		if((char)c==27 ){
 			break;
-		}
+		}*/
 	}
 
 	return 0;
