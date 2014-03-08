@@ -95,7 +95,6 @@ int main(){
 	//these two can be toggled by pressing 'd' or 't'
 	bool debugMode = true;
 	bool trackingEnabled = true;
-
 	//set up the matrices that we will need
 	//the two frames we will be comparing
 	Mat frame1,frame2;
@@ -172,7 +171,12 @@ int main(){
 
 			//show our captured frame
 			imshow("Frame1",frame1);
-
+			//check to see if a button has been pressed.
+			//this 10ms delay is necessary for proper operation of this program
+			//if removed, frames will not have enough time to referesh and a blank 
+			//image will appear.
+			waitKey(10) ;
+			
 		}
 		//release the capture before re-opening and looping again.
 		capture.release();
