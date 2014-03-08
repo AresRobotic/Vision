@@ -36,28 +36,22 @@ int main() {
 	
 	
 
-		while(1){
+	while(waitKey(30) != 27){
 		//store image to matrix
-		capture.read(cameraFeed);
+	capture.read(cameraFeed);
 	
-
-    namedWindow( window_name, CV_WINDOW_AUTOSIZE );
-  //  frame = imread("1.png");
-    
-    
-
 	//On redresse l'image produite en fonction des défaults du capteur
 	undistort(cameraFeed, undistord, cameraMatrix, distCoeffs);
 	
-    
-    
-    
-    imshow(window_name, undistord);
+	//namedWindow( window_name, CV_WINDOW_AUTOSIZE );
+  //  frame = imread("1.png");
+  
+    //imshow(window_name, undistord);
 
-    setMouseCallback(window_name, onMouse, (void*)&pt);
+   // setMouseCallback(window_name, onMouse, (void*)&pt);
     
     
-  waitKey(0);
+  waitKey(30);
 }
   return 0;
     
