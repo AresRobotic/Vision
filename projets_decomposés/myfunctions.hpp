@@ -8,7 +8,7 @@
 # define FRAME_HEIGHT 480
 # define MAX_NUM_OBJECTS 50
 //minimum and maximum object area
-# define MIN_OBJECT_AREA 3*3
+# define MIN_OBJECT_AREA 18*18
 # define MAX_OBJECT_AREA FRAME_HEIGHT*FRAME_WIDTH/1.5
 
 # define TRACKBAR_WINDOW_NAME "Trackbars"

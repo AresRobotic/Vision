@@ -1,4 +1,5 @@
 #include "myfunctions.hpp"
+#include <opencv2/highgui.hpp>
 
 
 Point3f generate3DFrom2DPoints(Point2f imagePoint,Mat rotationMatrix, Mat cameraMatrix, Mat tvec,int hauteurDuPlan)
