@@ -1,5 +1,8 @@
 #include <iostream>
-#include "opencv2/opencv.hpp"
+#include "opencv2/objdetect.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/core/utility.hpp"
 
 using namespace cv;
 using namespace std;
@@ -17,7 +20,7 @@ int main(int, char**)
         Mat frame;
         cap >> frame; // get a new frame from camera
         //Change la couleur
-        cvtColor(frame, edges, CV_BGR2GRAY);
+       // cvtColor(frame, edges, CV_BGR2GRAY);
 
 
         //Filtre Gaussien pour adoucir l'image et supprimer le bruit
