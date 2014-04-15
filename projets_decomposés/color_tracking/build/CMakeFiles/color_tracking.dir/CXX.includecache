@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/color_tracking/color_tracking.cpp
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+opencv2/opencv.hpp
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/color_tracking/opencv2/opencv.hpp
+../myfunctions.hpp
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/myfunctions.hpp
+iostream
+-
+sstream
+-
+string
+-
+iostream
+-
+fstream
+-
+
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/myfunctions.cpp
+myfunctions.hpp
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/myfunctions.hpp
+
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/myfunctions.hpp
+iostream
+-
+time.h
+-
+opencv2/opencv.hpp
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/opencv2/opencv.hpp
+

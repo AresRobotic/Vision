@@ -1,0 +1,1 @@
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/first_project/build/CMakeFiles/main.dir

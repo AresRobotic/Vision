@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/first_project/main.cpp
+iostream
+-
+opencv2/opencv.hpp
+/home/showok/Documents/Projets/Balise-Camera/git_depot/Vision/projets_decomposés/first_project/opencv2/opencv.hpp
+opencv2/imgproc/imgproc.hpp
+-
+
